@@ -43,7 +43,7 @@ import { VueDatatable } from '@iyogesharma/vue-datatable';
  }
  ```
  
- ####vue-datatable props
+ #### vue-datatable props
 
 | sr no  | Prop  | Description   | Default  |
 |--------|-------|---------------|----------|
