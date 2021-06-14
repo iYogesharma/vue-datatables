@@ -84,7 +84,7 @@
       options: {
         type: [Object, null],
         default: () => {
-          return { index: false };
+          return { index: true };
         }
       },
       footer: {
