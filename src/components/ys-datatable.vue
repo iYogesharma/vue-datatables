@@ -7,9 +7,10 @@
                 @change="handleFilterChange"
                 :lengthMenu="lengthMenu"
                 :limit.sync="query.limit"
+                :id="id"
         ></ys-filter>
-        <ys-search @click="handleButtonClick" :keyword.sync="query.keyword" @change="handleKeywordChange" :extension="extension" :server-side="serverSide">
-          <slot name="dt-buttons" v-show="$slots['dt-buttons']"></slot>
+        <ys-search @click="handleButtonClick" :keyword.sync="query.keyword" @change="handleKeywordChange" :extension="extension" :server-side="serverSide" :id="id">
+          <slot name="dt-buttons" v-show="$slots['dt-buttons']" ></slot>
         </ys-search>
       </div>
       <ys-table
@@ -20,7 +21,9 @@
               :server-side="serverSide"
               :per-page="query.limit"
               :page="query.page"
+              :footer="footer"
               :current-row="currentRow"
+              :id="id"
               @change="handleSortChange"
       ></ys-table>
       <ys-pagination
@@ -30,6 +33,7 @@
               :limit="query.limit"
               :current-row="currentRow"
               :records="tableData.length"
+              :id="id"
       ></ys-pagination>
     </div>
     <div class="col-sm-1"></div>
@@ -179,7 +183,7 @@
     },
     
     methods: {
-  
+      
       /*****************Datatable Event Handlers************************/
       
       sortList, resetFilters, resetKeyword, handleFilter,
@@ -232,7 +236,6 @@
         .then( res => {
           this.tableData = res.data.data;
           this.totalRecords = res.data.total;
-          
         })
         .catch( err => {
           console.log(err)
@@ -297,7 +300,7 @@
           console.log(err)
         })
       },
-  
+      
       /**
        * Filter data based on keyword specified and
        * paginate result
@@ -314,7 +317,7 @@
           this.tableData = this.data;
         }
       },
-  
+      
       /**
        * paginate table data
        */

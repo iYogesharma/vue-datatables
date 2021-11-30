@@ -1,6 +1,6 @@
 <template>
   <div class="col-sm-12 col-md-6">
-    <div id="example_filter" class="dataTables_filter">
+    <div :id="id+'_filter'" class="dataTables_filter">
       <label>Search:
         <input type="search" class="form-control form-control-sm" placeholder="" aria-controls="example"
                @blur="handleSearch" @keyup.enter="handleSearch" @search="handleSearch"></label>
@@ -24,6 +24,10 @@
   export default {
     name: 'YsSearch',
     props: {
+      id: {
+        type: String,
+        required:true
+      },
       keyword: {
         type: String,
         default: ''

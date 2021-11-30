@@ -1,18 +1,18 @@
 <template>
   <div class="row">
     <div class="col-sm-12 table-responsive">
-      <table id="example" class="table ys-table table-striped table-bordered dataTable" style="width: 100%;" role="grid" aria-describedby="example_info">
+      <table :id="id" class="table ys-table table-striped table-bordered dataTable" style="width: 100%;" role="grid" aria-describedby="example_info">
         <thead v-if="columns.length">
         <tr role="row">
-          <th scope="col" style="text-align: center">
-            <div v-if="options.index" class="cell">#
+          <th scope="col" v-if="options.index" id="_index" style="text-align: center">
+            <div  class="cell">#
               <span class="caret-wrapper" >
                     <i class="sort-caret ascending"  @click=" $event =>  handleSortClick($event, {label:'index', sortable:true}, 'ascending')"></i>
                     <i class="sort-caret descending" @click=" $event =>  handleSortClick($event, {label:'index', sortable:true}, 'descending')"></i>
                   </span>
             </div>
           </th>
-          <th v-for="column in columns" scope="col"  tabindex="0" aria-controls="example" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" :style="column.style">
+          <th v-for="column in columns" scope="col" :id="'_'+column.label"   tabindex="0" :aria-controls="id" rowspan="1" colspan="1" aria-label="Position: activate to sort column ascending" :style="column.style">
             <div class="cell">{{column.label}}
               <span v-if="column.sortable" class="caret-wrapper" >
                     <i class="sort-caret ascending"  @click=" $event =>  handleSortClick($event, column, 'ascending')"></i>
@@ -26,7 +26,7 @@
         <tbody v-if="data.length">
         <tr v-for="(row,index) in data" :cell="index" :key="'ys-datatable-row-'+index">
           <th v-if="options.index" style="text-align: center;" scope="row">{{rowIndex+index+1}}</th>
-          <td v-for="column in columns" :key="'ys-datatable-row-column-'+column.label">{{row[snake_case(column.label)]}}</td>
+          <td v-for="column in columns" :key="'ys-datatable-row-column-'+column.label" v-html="row[snake_case(column.label)]"></td>
         </tr>
         </tbody>
         <tbody v-else>
@@ -67,7 +67,7 @@
     props: {
       id: {
         type: String,
-        default: "ys-datatable"
+        required:true
       },
       customClass: {
         type: String,

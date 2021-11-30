@@ -1,6 +1,6 @@
 <template>
   <div class="col-sm-12 col-md-6">
-    <div class="dataTables_length" id="example_length">
+    <div class="dataTables_length" :id="id+'_length'">
       <label class="dataTables_filter_label">Show
         <select @change="handleLimitChange" name="length"  class="custom-select custom-select-sm form-control form-control-sm">
           <option
@@ -20,6 +20,10 @@
   export default {
     name: 'YsFilter',
     props: {
+      id: {
+        type: String,
+        required:true
+      },
       lengthMenu: {
         type: Array,
         default: () => [10, 15, 20, 40, 80, 100, 200, 500, 1000],

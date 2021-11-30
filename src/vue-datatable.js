@@ -13,7 +13,7 @@ import YsDatatable from './components/ys-datatable';
    */
 
 
-  Vue.component('vue-datatable', require('./components/ys-datatable'));
+  Vue.component('ys-datatable', require('./components/ys-datatable'));
   
   const datatable = new Vue({
     el: '#ys-datatable',

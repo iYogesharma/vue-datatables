@@ -1,6 +1,6 @@
 # Vue DataTables
 
-A lightweight component for rendering data tables for VueJS aapplications.
+A light weight component for rendering data tables for VueJS aapplications.
 
 [![GitHub open issues](https://img.shields.io/github/issues/iYogesharma/vue-datatables.svg)](https://github.com/iYogesharma/vue-datatables/issues)
 ![GitHub](https://img.shields.io/github/license/iYogesharma/vue-datatables.svg)
@@ -14,7 +14,7 @@ A lightweight component for rendering data tables for VueJS aapplications.
 
 [x]  Search
 
-[x]  Provide a Action Button component
+[x]  Provide an Action Button component
 
 [x]  Work with both Client as well as Server side
 
@@ -56,10 +56,14 @@ import { VueDatatable } from '@iyogesharma/vue-datatable';
 | 7 | page  | current selected page  | 1  |
 | 8 | limit  | number of records to be displayed per page | 10  |
 | 9 | length-menu  | list of option to decide number of records per page |   [10, 15, 20, 40, 80, 100, 200, 500, 1000] |
-| 11 | order  | define default ordering |  {  column: 'name', direction: 'ascending'}   |
+| 11 | order  | define default ordering ( works only with server side ) |  {  column: 'name', direction: 'ascending'}   |
 | 12 | params  | additional parameter to be send along with request like headers or csrf token| {}   |
-| 13 | filters  | define default filtering  | {  'users.active' : 1}  |
+| 13 | filters  | define default filtering ( works only with server side )  | {  'users.active' : 1}  |
 | 14 | filename  | name of the file to be exported from datatable  |  report  |
-| 15 | extension  |  extension of the file to be exported from datatable  | csv (currently supported csv,xls,json)   |
+| 15 | extension  |  extension of the file to be exported from datatable ( server-side ) | csv (currently supported csv,xls,json)   |
 | 16 | footer  | whether to display table footer or not | true  |
 | 17 | id  | id of the html table element | ys-datatable  |
+
+#### Demo
+See [demo/server-side.vue](demo/server-side.vue). <br>
+See [demo/default.vue](demo/default.vue).
