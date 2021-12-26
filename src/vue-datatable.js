@@ -16,5 +16,5 @@ require('./css/ys-datatables.css');
 Vue.component('ys-datatable', YsDatatable);
 
 const datatable = new Vue({
-  el: '#ys-datatable',
+  el: '#vue-datatable',
 });

@@ -7,13 +7,13 @@
           <div class="panel-heading">Vue Datatable Demo</div>
 
           <div class="panel-body">
-            <vue-datatable
+            <ys-datatable
               :data="data"
               :columns="columns"
               :order="order"
             >
               <ys-button slot="dt-buttons"  @click="handleButtonClick" icon="glyphicon glyphicon-plus" label="Test" id="AddButton"></ys-button>
-            </vue-datatable>
+            </ys-datatable>
           </div>
         </div>
       </div>
@@ -22,13 +22,13 @@
 </template>
 
 <script>
-  import { VueDatatable,YsButton }  from "../index";
+  import { YsDatatable,YsButton }  from "@iyogesharma/vue-datatable";
 
 
   export default {
     components: {
       YsButton,
-      VueDatatable
+      YsDatatable
     },
     data() {
       return {

@@ -29,18 +29,18 @@ npm install @iyogesharma/vue-datatables
 In your `main.js`
 
 ```js
-import { VueDatatable } from '@iyogesharma/vue-datatable';
+import { YsDatatable } from '@iyogesharma/vue-datatable';
 
-Vue.use(VueDatatable);
+Vue.use(YsDatatable);
 ```
 
  If you don't want to reference entire plugin, you can define the component from your component
 
  ```js
-import { VueDatatable } from '@iyogesharma/vue-datatable';
+import { YsDatatable } from '@iyogesharma/vue-datatable';
 
  export default {
-   components: { VueDatatable }
+   components: { YsDatatable }
  }
  ```
 
