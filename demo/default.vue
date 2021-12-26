@@ -22,7 +22,7 @@
 </template>
 
 <script>
-  import { YsDatatable,YsButton }  from "@iyogesharma/vue-datatable";
+  import { YsDatatable,YsButton }  from "@iyogesharma/vue-datatables";
 
 
   export default {
