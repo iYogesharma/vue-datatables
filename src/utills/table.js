@@ -7,11 +7,28 @@ import {export_json_to_excel} from './Export2Excel';
  * @return void
  */
 export function handleFilter(data) {
-  if (data === '' || data === null) {
+  data = this.validateFilters( data );
+  if ( !data.length ) {
     this.resetFilters();
   }
   this.query.page = 1;
-  this.getList()
+  if(this.url && this.serverSide ) {
+    this.getList();
+  } else {
+    this.filterPaginate() ;
+  }
+
+
+}
+
+export function validateFilters( data ) {
+  return Object.keys(data).filter( d => {
+    if ( data[d] === "" || data[d] === null ) {
+      delete this.query.filters[d];
+      return false;
+    }
+    return true;
+  });
 }
 
 /**
@@ -39,14 +56,32 @@ export function resetKeyword() {
  */
 export function sortList(data) {
   const { prop, order, sort } = data;
-  
   if (order){
     if ( sort === 'default' || prop === 'index') {
-      this.$refs['table'].data.sort(() => -1);
+      this.$refs['table'].data.sort((a,b) => {
+        let key1 = a[prop];
+        let key2 = b[prop];
+        if( typeof a[prop] === 'string'){
+           key1 = key1.toLowerCase();
+           key2 = key2.toLowerCase();
+        }
+        if (key1 < key2){
+          if( order === 'ascending'){
+            return -1;
+          }
+          return 1;
+        };
+        if (key1 > key2){
+          if( order === 'ascending'){
+            return 1;
+          }
+          return -1;
+        }
+      });
     } else {
       this.query.order['column'] = prop;
       this.query.order['direction'] = order;
-      this.handleFilter();
+      this.getList();
     }
   }
 }
@@ -61,10 +96,16 @@ export function formatJson(filterVal, jsonData) {
   return jsonData.map(v => filterVal.map(j => v[j]));
 }
 
+/**
+ * convert string to snake case use desired delimeter
+ * @param str
+ * @param del
+ * @returns {string}
+ */
 export function  snake_case(str, del = '_') {
   // str += del;
   str = str.split(' ');
-  
+
   for (var i = 0; i < str.length; i++) {
     str[i] = str[i].toLowerCase();
   }

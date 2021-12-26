@@ -1,7 +1,7 @@
 <template>
-  <div class="row">
+  <div class="row" :id="id+'_pagination'">
     <div class="col-sm-12 col-md-5">
-      <div class="dataTables_info" id="example_info" role="status" aria-live="polite">Showing {{currentRow + 1}} to {{currentRow+currentLimit}} of {{total}} entries</div>
+      <div class="dataTables_info" :id="id+'_info'" role="status" aria-live="polite">Showing {{currentRow + 1}} to {{currentRow+limit < total ? currentRow+limit : total }} of {{total}} entries</div>
     </div>
     <div class="col-sm-12 col-md-7">
       <div class="dataTables_paginate paging_simple_numbers" v-if="pages === 0">
@@ -115,6 +115,10 @@
   export default {
     name: "YsPagination",
     props: {
+      id: {
+        type: String,
+        required:true
+      },
       page: {
         type: Number,
         default: 1,

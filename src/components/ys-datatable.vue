@@ -7,13 +7,15 @@
                 @change="handleFilterChange"
                 :lengthMenu="lengthMenu"
                 :limit.sync="query.limit"
+                :id="id"
         ></ys-filter>
-        <ys-search @click="handleButtonClick" :keyword.sync="query.keyword" @change="handleKeywordChange" :extension="extension" :server-side="serverSide">
+        <ys-search   :id="id" @click="handleButtonClick" :keyword.sync="query.keyword" @change="handleKeywordChange" :extension="extension" :server-side="serverSide">
           <slot name="dt-buttons" v-show="$slots['dt-buttons']"></slot>
         </ys-search>
       </div>
       <ys-table
               ref="table"
+              :id="id"
               :columns="columns"
               :data="tableData"
               :options="{ index: true }"
@@ -22,8 +24,18 @@
               :page="query.page"
               :current-row="currentRow"
               @change="handleSortChange"
-      ></ys-table>
+      >
+      <template v-for="column in columns" :slot="'column('+column.label+')'"  slot-scope="{item}">
+        <slot :name="'column('+column.label+')'" :item="item">
+        </slot>
+      </template>
+      <template v-for="column in columns" :slot="column.label" slot-scope="{item}">
+        <slot :name="'cell('+column.label+')'" :item="item">
+        </slot>
+      </template>
+      </ys-table>
       <ys-pagination
+              :id="id"
               @pagination="handlePaginationChange"
               :page.sync="query.page"
               :total="totalRecords"
@@ -41,21 +53,21 @@
   import YsFilter from './filter';
   import YsSearch from './search';
   import YsTable from './table';
-  import {sortList, resetFilters, resetKeyword, handleFilter, formatJson, snake_case } from '../utills/table';
+  import {sortList, resetFilters, resetKeyword, handleFilter,validateFilters, formatJson, snake_case } from '../utills/table';
   import {export_json_to_excel} from '../utills/Export2Excel';
   import axios from 'axios';
-  
+
   export default {
-    
+
     name: "YsDatatable",
-    
+
     components: {
       YsSearch,
       YsFilter,
       YsTable,
       YsPagination
     },
-    
+
     props: {
       type: {
         type: String,
@@ -84,7 +96,7 @@
       options: {
         type: [Object, null],
         default: () => {
-          return { index: true };
+          return { index: false };
         }
       },
       footer: {
@@ -147,7 +159,7 @@
         default: 'csv'
       }
     },
-    
+
     data() {
       return {
         tableData: this.data,
@@ -162,13 +174,23 @@
         },
       }
     },
-    
+
     computed: {
       currentRow: function () {
         return this.query.limit * ( this.query.page -1 );
       }
     },
-    
+
+    watch: {
+      filters:{
+        handler(val){
+          this.query.filters = val;
+          this.handleFilter(val)
+        },
+        deep: true
+      }
+    },
+
     created() {
       if( this.url && this.serverSide ) {
         this.getList();
@@ -177,21 +199,21 @@
         this.paginate()
       }
     },
-    
+
     methods: {
-  
+
       /*****************Datatable Event Handlers************************/
-      
-      sortList, resetFilters, resetKeyword, handleFilter,
-      
+
+      sortList, resetFilters, resetKeyword, handleFilter,validateFilters,
+
       handleKeywordChange() {
         if(this.url && this.serverSide  ) {
           this.getList();
         } else {
-          this.filterPaginate();
+          this.filterKeywordPaginate();
         }
       },
-      
+
       handleTableDataChange() {
         if( this.url && this.serverSide) {
           this.getList();
@@ -199,7 +221,7 @@
           this.paginate();
         }
       },
-      
+
       handlePaginationChange(e) {
         if(this.url && this.serverSide ) {
           this.getList();
@@ -207,7 +229,7 @@
           this.paginate() ;
         }
       },
-      
+
       handleFilterChange(){
         this.query.page = 1;
         if(this.url && this.serverSide ) {
@@ -216,13 +238,13 @@
           this.paginate() ;
         }
       },
-      
+
       handleSortChange(data) {
         this.sortList(data)
       },
-      
+
       /*****************************************************************/
-      
+
       /**
        * get data from storage and display in datatable
        * @uses axios
@@ -232,13 +254,12 @@
         .then( res => {
           this.tableData = res.data.data;
           this.totalRecords = res.data.total;
-          
         })
         .catch( err => {
           console.log(err)
         })
       },
-      
+
       /**
        * Handle datatable action button click
        */
@@ -257,7 +278,7 @@
           }
         }
       },
-      
+
       /**
        * handle export table data to excel on client side
        * @uses utills/Export2Excel
@@ -265,7 +286,7 @@
       handleDownload() {
         this.downloading = true;
         var filterVal = []; var tHeader = [];
-        
+
         this.columns.map( col => {
           tHeader.push(col.label);
           filterVal.push(snake_case(col.label));
@@ -279,7 +300,7 @@
         });
         this.downloading = false;
       },
-      
+
       /**
        * handle server side export of table data
        * @uses file-saver
@@ -297,24 +318,53 @@
           console.log(err)
         })
       },
-  
+
       /**
        * Filter data based on keyword specified and
        * paginate result
        * @return void
        */
-      filterPaginate(){
+      filterKeywordPaginate(){
         if( this.query.keyword && this.query.keyword !== "") {
           let self = this;
           this.tableData = this.data.filter( function(d) {
             return Object.values(d).includes(self.query.keyword)
           } );
-          this.tableData.slice((this.query.page - 1) * this.query.limit, this.query.page * this.query.limit);
+          this.paginateTableData();
         } else {
           this.tableData = this.data;
         }
       },
-  
+
+      filterPaginate(){
+        var data = [];
+        let self = this;
+        if(  Object.keys(this.filters).length) {
+
+          Object.keys(self.query.filters).map( key => {
+            if( data.length ) {
+              data = data.filter( function(d) {
+                return  d[key] == self.query.filters[key];
+              } );
+            } else {
+              data = self.data.filter( function(d) {
+                return  d[key] == self.query.filters[key];
+              } );
+            }
+          });
+          this.tableData = data;
+        } else {
+          this.tableData = this.data;
+        }
+
+        this.paginateTableData();
+      },
+
+      paginateTableData() {
+        // human-readable page numbers usually start with 1, so we reduce 1 in the first argument
+        this.tableData.slice((this.query.page - 1) * this.query.limit, this.query.page * this.query.limit);
+      },
+
       /**
        * paginate table data
        */
@@ -323,6 +373,6 @@
         this.tableData =  this.data.slice((this.query.page - 1) * this.query.limit, this.query.page * this.query.limit);
       },
     }
-    
+
   };
 </script>
