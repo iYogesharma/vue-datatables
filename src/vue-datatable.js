@@ -1,6 +1,9 @@
 // add ys-datatable component to existing application
 
 import Vue from 'vue';
+
+import YsButton from './src/components/button';
+
 import YsDatatable from './components/ys-datatable';
 
 
@@ -14,6 +17,7 @@ require('./css/ys-datatables.css');
 
 
 Vue.component('ys-datatable', YsDatatable);
+Vue.component('ys-buttom', YsButton);
 
 const datatable = new Vue({
   el: '#vue-datatable',
