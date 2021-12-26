@@ -1,5 +1,5 @@
 import './css/ys-datatables.css';
 import YsButton from './src/components/button';
-import VueDatatable from './src/components/ys-datatable';
+import YsDatatable from './src/components/ys-datatable';
 
-export { VueDatatable, YsButton };
+export { YsDatatable, YsButton };

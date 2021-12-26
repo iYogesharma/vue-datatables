@@ -8,10 +8,16 @@
 
           <div class="panel-body">
             <vue-datatable
-              :data="data"
-              :columns="columns"
-              :order="order"
+                    :server-side="true"
+                    url="/api/users"
+                    :data="data"
+                    :filters="filters"
+                    :order="order"
+                    :columns="columns"
             >
+            <template #cell(email)="{item}">
+               <b>{{item.email}}</b>
+            </template>
               <ys-button slot="dt-buttons"  @click="handleButtonClick" icon="glyphicon glyphicon-plus" label="Test" id="AddButton"></ys-button>
             </vue-datatable>
           </div>
@@ -36,37 +42,14 @@
           { label: "name", sortable: true },
           { label: "email", sortable: true },
         ],
-        data:[{
-          "name": "user1",
-          "email": "user1@demo.com",
-        }, {
-          "name": "user2",
-          "email": "user2@demo.com",
-        }, {
-          "name": "user3",
-          "email": "user3@demo.com",
-        }, {
-          "name": "user4",
-          "email": "user4@demo.com",
-        }, {
-          "name": "user5",
-          "email": "user5@demo.com",
-        }, {
-          "name": "user6",
-          "email": "user6@demo.com",
-        }, {
-          "name": "user7",
-          "email": "user7@demo.com",
-        }, {
-          "name": "user8",
-          "email": "user8@demo.com",
-        }, {
-          "name": "user9",
-          "email": "user9@demo.com",
-        }, {
-          "name": "user10",
-          "email": "user10@demo.com",
-        }]
+        filters: {"users.active":1},// used in query like where('users.role_id'=1)
+        // note for date range filter yo need to use array like
+        // filters: {"users.created_at": ["2020-07-15","2021-07-21"]} ( for date filter to work column name must include either _at or date
+        // filters: {"users.status": [1,2]}
+        order: {
+          column: 'name',
+          direction: 'ascending',
+        },
       };
     },
     methods: {

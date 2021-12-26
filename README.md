@@ -18,8 +18,9 @@ A light weight component for rendering data tables for VueJS aapplications.
 
 [x]  Work with both Client as well as Server side
 
+[CDN](https://cdn.jsdelivr.net/gh/iYogesharma/vue-datatables/dist/vue-datatable.js)
 
-![vue-datatables](https://github.com/iYogesharma/vue-datatables/blob/master/demo.png)
+![vue-datatables](https://github.com/iYogesharma/vue-datatables/blob/main/demo.png)
 
 ## Installation
 ```
@@ -34,15 +35,15 @@ Vue.use(VueDatatable);
 ```
 
  If you don't want to reference entire plugin, you can define the component from your component
- 
+
  ```js
 import { VueDatatable } from '@iyogesharma/vue-datatable';
-       
+
  export default {
    components: { VueDatatable }
  }
  ```
- 
+
  #### vue-datatable props
 
 | sr no  | Prop  | Description   | Default  |
@@ -65,5 +66,11 @@ import { VueDatatable } from '@iyogesharma/vue-datatable';
 | 17 | id  | id of the html table element | ys-datatable  |
 
 #### Demo
-See [demo/server-side.vue](demo/server-side.vue). <br>
-See [demo/default.vue](demo/default.vue).
+
+[demo/default.vue](demo/default.vue).<br>
+
+[demo/server-side.vue](demo/server-side.vue). <br>
+
+[demo/changeColumnHeading.vue](demo/changeColumnHeading.vue).<br>
+
+[demo/changeColumnValue.vue](demo/changeColumnValue.vue).

@@ -17,8 +17,8 @@ export function handleFilter(data) {
   } else {
     this.filterPaginate() ;
   }
-  
-  
+
+
 }
 
 export function validateFilters( data ) {
@@ -56,10 +56,28 @@ export function resetKeyword() {
  */
 export function sortList(data) {
   const { prop, order, sort } = data;
-  
   if (order){
     if ( sort === 'default' || prop === 'index') {
-      this.$refs['table'].data.sort(() => -1);
+      this.$refs['table'].data.sort((a,b) => {
+        let key1 = a[prop];
+        let key2 = b[prop];
+        if( typeof a[prop] === 'string'){
+           key1 = key1.toLowerCase();
+           key2 = key2.toLowerCase();
+        }
+        if (key1 < key2){
+          if( order === 'ascending'){
+            return -1;
+          }
+          return 1;
+        };
+        if (key1 > key2){
+          if( order === 'ascending'){
+            return 1;
+          }
+          return -1;
+        }
+      });
     } else {
       this.query.order['column'] = prop;
       this.query.order['direction'] = order;
@@ -87,7 +105,7 @@ export function formatJson(filterVal, jsonData) {
 export function  snake_case(str, del = '_') {
   // str += del;
   str = str.split(' ');
-  
+
   for (var i = 0; i < str.length; i++) {
     str[i] = str[i].toLowerCase();
   }
